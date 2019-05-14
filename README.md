@@ -1,2 +1,2 @@
-# greatcode.co
+# GreatCode
 http://greatcode.co/ source code
