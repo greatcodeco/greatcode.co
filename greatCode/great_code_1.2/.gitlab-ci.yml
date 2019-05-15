@@ -1,0 +1,27 @@
+image: ubuntu:17.10
+
+before_script:
+  - apt-get update -qq
+  - apt-get install -y -qq ssh
+  - apt-get install -y -qq sshpass
+  - mkdir ~/.ssh
+  - echo "StrictHostKeyChecking no" >> ~/.ssh/config
+deploy_master:
+  type: deploy
+  environment:
+    name: staging
+    url: majoris.dev
+  script:
+    - sshpass -p "$USER_PASS" ssh -p "$REMOTE_PORT" "$REMOTE_USE@$REMOTE_HOST" "cd /var/www/majoris && git checkout master && git pull origin master && exit"
+  only:
+    - master
+deploy_dev:
+  type: deploy
+  environment:
+    name: staging
+    url: test.majoris.dev
+  script:
+    - sshpass -p "$USER_PASS" ssh -p "$REMOTE_PORT" "$REMOTE_USE@$REMOTE_HOST" "cd /var/www/dev-majoris && git checkout master && git pull origin master && exit"
+  only:
+    - dev
+
